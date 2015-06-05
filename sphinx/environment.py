@@ -962,6 +962,10 @@ class BuildEnvironment:
             # The special key ? is set for nonlocal URIs.
             node['candidates'] = candidates = {}
             imguri = node['uri']
+            try:
+                imguri = self.config.replace_config_var(imguri)
+            except AttributeError as ex:
+                self.warn_node("%s in '%s'" % (ex.message, imguri), node)
             if imguri.find('://') != -1:
                 self.warn_node('nonlocal image URI found: %s' % imguri, node)
                 candidates['?'] = imguri

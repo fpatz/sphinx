@@ -382,3 +382,10 @@ class Config(object):
 
     def __contains__(self, name):
         return name in self.values
+
+    RE_VAR_REPLACE = re.compile(r"\{(?P<varname>[a-z_]+)\}")
+
+    def replace_config_var(self, text):
+        return self.RE_VAR_REPLACE.sub(
+            lambda match: getattr(self, match.groupdict()['varname']),
+            text)
